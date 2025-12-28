@@ -1,0 +1,31 @@
+{
+  "name": "m-otion",
+  "version": "1.0.0",
+  "description": "M:OTION - Live2D runtime player + tracking driver",
+  "license": "Apache-2.0",
+  "author": "RFC",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "dev": "concurrently -c \"green,cyan,magenta\" \"node server.js\" \"npm run dev --prefix front\" \"npm run dev:py\"",
+    "dev:py": "cd pyserver && python -m uvicorn pyserver:app --reload --host 0.0.0.0 --port 8001",
+    "build": "npm run build --prefix front",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "adm-zip": "^0.5.12",
+    "better-sqlite3": "^9.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^6.11.2",
+    "helmet": "^7.1.0",
+    "multer": "^1.4.5-lts.1",
+    "node-unrar-js": "^2.0.2",
+    "uuid": "^9.0.1",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
