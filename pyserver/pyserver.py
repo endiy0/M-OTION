@@ -205,6 +205,8 @@ def build_payload(result, header, fps_server: float):
     yaw, pitch, roll = extract_pose_from_matrix(result.facial_transformation_matrixes[0])
   else:
     yaw, pitch, roll = estimate_pose_from_landmarks(result.face_landmarks[0])
+  yaw = -yaw
+  pitch = -pitch
   payload["pose"] = {"yawDeg": yaw, "pitchDeg": pitch, "rollDeg": roll}
 
   if header.get("ts"):
