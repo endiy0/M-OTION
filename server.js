@@ -135,6 +135,29 @@ app.put("/api/projects/:id", (req, res) => {
   res.json({ ok: true });
 });
 
+app.delete("/api/projects/:id", (req, res) => {
+  const id = req.params.id;
+  const projectDir = path.join(PROJECT_ROOT, id);
+  const projectFile = getProjectFile(id);
+  const dirExists = fs.existsSync(projectDir);
+  const fileExists = fs.existsSync(projectFile);
+  try {
+    const result = db.prepare("DELETE FROM projects WHERE id = ?").run(id);
+    if (dirExists) {
+      fs.rmSync(projectDir, { recursive: true, force: true });
+    } else if (fileExists) {
+      fs.rmSync(projectFile, { force: true });
+    }
+    if (!dirExists && !fileExists && result.changes === 0) {
+      return res.status(404).json({ error: "Project not found." });
+    }
+    return res.json({ ok: true });
+  } catch (err) {
+    console.error("Project delete error", err);
+    return res.status(500).json({ error: "Failed to delete project." });
+  }
+});
+
 app.post("/api/projects/:id/live2d/upload", uploadZip.single("file"), async (req, res) => {
   const id = req.params.id;
   ensureProjectDirs(id);

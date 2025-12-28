@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { createProject, listProjects, type ProjectRow } from "../lib/api";
+import { createProject, deleteProject, listProjects, type ProjectRow } from "../lib/api";
 
 export default function Home() {
   const [projects, setProjects] = useState<ProjectRow[]>([]);
@@ -14,6 +14,14 @@ export default function Home() {
   const handleCreate = async () => {
     const res = await createProject(name);
     navigate(`/editor/${res.id}`);
+  };
+
+  const handleDelete = async (id: string) => {
+    const confirmed = window.confirm("本当に削除しますか？戻すことはできません。");
+    if (!confirmed) return;
+    await deleteProject(id);
+    const updated = await listProjects();
+    setProjects(updated);
   };
 
   return (
@@ -40,6 +48,7 @@ export default function Home() {
                 <Link to={`/live/${p.id}`}>
                   <button>ライブ</button>
                 </Link>
+                <button onClick={() => handleDelete(p.id)}>削除</button>
               </div>
             </div>
           ))}

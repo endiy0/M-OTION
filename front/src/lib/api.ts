@@ -80,6 +80,13 @@ export async function saveProject(id: string, project: Project) {
   if (!resp.ok) throw new Error("保存に失敗しました。");
 }
 
+export async function deleteProject(id: string) {
+  const resp = await fetch(`/api/projects/${id}`, {
+    method: "DELETE",
+  });
+  if (!resp.ok) throw new Error("Failed to delete project.");
+}
+
 export async function uploadLive2DZip(id: string, file: File) {
   const form = new FormData();
   form.append("file", file, file.name);
